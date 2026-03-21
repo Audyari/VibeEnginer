@@ -2,9 +2,10 @@ import { Elysia, t } from 'elysia';
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
 import { users } from '../db/schema';
+import { registerUser } from '../services/users-services';
 
 export const usersRoutes = new Elysia()
-  .group('/users', (app) => 
+  .group('/users', (app) =>
     app
       // GET /users - Get all users
       .get('/', async () => {
@@ -12,23 +13,15 @@ export const usersRoutes = new Elysia()
         return { success: true, data: allUsers };
       })
 
-      // POST /users - Create new user
+      // POST /users - Register new user
       .post('/', async ({ body }) => {
-        await db.insert(users).values({
-          name: body.name,
-          email: body.email,
-          password: body.password,
-        });
+        const result = await registerUser(body);
 
-        const newUser = await db.select().from(users)
-          .orderBy(users.id, 'desc')
-          .limit(1);
+        if (!result.success) {
+          return { Error: result.error };
+        }
 
-        return {
-          success: true,
-          message: 'User created successfully',
-          id: newUser[0].id
-        };
+        return { Data: 'OK' };
       }, {
         body: t.Object({
           name: t.String(),

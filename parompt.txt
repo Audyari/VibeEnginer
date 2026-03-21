@@ -8,11 +8,60 @@ Dan Gunakan Dependency :
 
 -Elysia.JS
 -Drizzle
--MySQL
+-Sqlite
 
 jananga terlalu low level atau detail
 Cukup instruksikan secara hight level
 
 Nanti documen planning nya akan di gunakan oleh Programmer atau model yang lebih murah untuk diimpelemtasiakan
 
+
+================================================================
+
+buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
+lebih murah.
+
+isi dari planing nya adalah sebagai berikut :
+
+buat table users :
+id integer  auto increment
+name varchar 255 not null
+email varchar 255 not null
+password varchar not null (password merupakan hash dari bcrypt)
+created_ad  timestamp default current_timestamp
+
+buatkan API untuk registrasi user baru
+
+Endpoint : POST /api/users
+
+Request Body :
+
+{
+    "name" : "AudyariW"
+    "email" : "audy123ari@gmail.com"
+    "password" : "rahasia"
+}
+
+Response Body (Succees) :
+
+{
+    "Data" : "OK"
+}
+
+Response Body (Error) :
+
+{
+    "Error" : "Email Sudah Terdaftar"
+}
+
+Struktur Folder didalam src
+- Router : ini berisi routing Elysia JS
+- services : ini berisi logic bisnis aplikasi
+
+Struktur File :
+- Router : menggunakan format misal users-route.ts
+- Services : menggunakan format misal users-services.ts
+
+Jelaskan Tahapan - tahapan  yang harus di lakukkan untuk mengimplementasikan Fitur ini, anggap nanti yang
+mengimplentasikan programmer juniar atau user model ai yang lebih murah.
 
