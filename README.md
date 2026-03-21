@@ -94,15 +94,16 @@ http://localhost:3000/swagger/json
 | GET | `/` | Welcome message |
 | GET | `/health` | Server health status |
 
-### Users CRUD
+### Users CRUD & Auth
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/users` | Get all users |
-| GET | `/users/:id` | Get user by ID |
-| POST | `/users` | Create new user |
-| PUT | `/users/:id` | Update user |
-| DELETE | `/users/:id` | Delete user |
+| GET | `/api/users` | Get all users |
+| GET | `/api/users/:id` | Get user by ID |
+| POST | `/api/users` | Register new user |
+| POST | `/api/users/login` | Login user |
+| PUT | `/api/users/:id` | Update user |
+| DELETE | `/api/users/:id` | Delete user |
 
 ---
 
@@ -111,7 +112,7 @@ http://localhost:3000/swagger/json
 ### Get All Users
 
 ```bash
-curl http://localhost:3000/users
+curl http://localhost:3000/api/users
 ```
 
 **Response:**
@@ -123,7 +124,7 @@ curl http://localhost:3000/users
       "id": 1,
       "name": "Audyari",
       "email": "audyari@example.com",
-      "password": "password123",
+      "password": "$2a$10$hashedpassword...",
       "createdAt": "2026-03-21T16:28:50.120Z",
       "updatedAt": null
     }
@@ -134,21 +135,29 @@ curl http://localhost:3000/users
 ### Get User by ID
 
 ```bash
-curl http://localhost:3000/users/1
+curl http://localhost:3000/api/users/1
 ```
 
-### Create User
+### Register User
 
 ```bash
-curl -X POST http://localhost:3000/users \
+curl -X POST http://localhost:3000/api/users \
   -H "Content-Type: application/json" \
   -d "{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"password\":\"secret123\"}"
+```
+
+### Login User
+
+```bash
+curl -X POST http://localhost:3000/api/users/login \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"john@example.com\",\"password\":\"secret123\"}"
 ```
 
 ### Update User
 
 ```bash
-curl -X PUT http://localhost:3000/users/1 \
+curl -X PUT http://localhost:3000/api/users/1 \
   -H "Content-Type: application/json" \
   -d "{\"name\":\"John Updated\",\"email\":\"john.new@example.com\",\"password\":\"newpass\"}"
 ```
@@ -156,7 +165,7 @@ curl -X PUT http://localhost:3000/users/1 \
 ### Delete User
 
 ```bash
-curl -X DELETE http://localhost:3000/users/1
+curl -X DELETE http://localhost:3000/api/users/1
 ```
 
 ---
@@ -235,12 +244,17 @@ HOST=localhost
 curl http://localhost:3000/health
 
 # Get all users
-curl http://localhost:3000/users
+curl http://localhost:3000/api/users
 
-# Create user
-curl -X POST http://localhost:3000/users \
+# Register user
+curl -X POST http://localhost:3000/api/users \
   -H "Content-Type: application/json" \
   -d "{\"name\":\"Test\",\"email\":\"test@test.com\",\"password\":\"123\"}"
+
+# Login user
+curl -X POST http://localhost:3000/api/users/login \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"test@test.com\",\"password\":\"123\"}"
 ```
 
 ---
