@@ -1,14 +1,14 @@
-import { migrate } from 'drizzle-orm/mysql2/migrator';
-import { db, pool } from './index';
+import { migrate } from 'drizzle-orm/libsql/migrator';
+import { client, db } from './index';
 
-async function runMigrate() {
+async function runMigrations() {
   console.log('Running migrations...');
   await migrate(db, { migrationsFolder: './drizzle' });
   console.log('Migrations completed!');
-  await pool.end();
+  await client.close();
 }
 
-runMigrate().catch((err) => {
+runMigrations().catch((err) => {
   console.error('Migration failed:', err);
   process.exit(1);
 });

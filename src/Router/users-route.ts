@@ -2,7 +2,7 @@ import { Elysia, t } from 'elysia';
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
 import { users } from '../db/schema';
-import { registerUser } from '../services/users-services';
+import { registerUser, loginUser } from '../services/users-services';
 
 export const usersRoutes = new Elysia()
   .group('/api/users', (app) =>
@@ -30,14 +30,32 @@ export const usersRoutes = new Elysia()
         }),
       })
 
+      // POST /api/users/login - Login user
+      .post('/login', async ({ body }) => {
+        const { email, password } = body;
+
+        const result = await loginUser(email, password);
+
+        if (!result.success) {
+          return { Error: result.error };
+        }
+
+        return { Data: result.token };
+      }, {
+        body: t.Object({
+          email: t.String(),
+          password: t.String(),
+        }),
+      })
+
       // GET /api/users/:id - Get user by ID
       .get('/:id', async ({ params }) => {
         const id = parseInt(params.id);
-        
+
         if (isNaN(id) || id <= 0) {
           throw new Error('Invalid user ID');
         }
-        
+
         const user = await db.select().from(users).where(eq(users.id, id)).limit(1);
 
         if (!user || user.length === 0) {
