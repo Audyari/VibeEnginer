@@ -192,14 +192,16 @@ VibeEnginer/
 │   │   ├── schema.ts     # Drizzle table definitions
 │   │   ├── seed.ts       # Dummy data seeder
 │   │   └── migrate.ts    # Migration script
-│   ├── routes/
-│   │   └── index.ts      # API routes
+│   ├── Router/
+│   │   └── users-route.ts # API routes
+│   ├── services/
+│   │   └── users-services.ts # Business logic
 │   └── config/
 │       └── env.ts        # Environment variables
 ├── drizzle/              # Migration files
 ├── drizzle.config.ts     # Drizzle configuration
 ├── .env                  # Environment variables
-├── sqlite_dev.db         # SQLite database file
+├── sqlite.db             # SQLite database file
 └── package.json
 ```
 
@@ -211,7 +213,7 @@ Create a `.env` file:
 
 ```env
 # Database
-DB_URL=file:sqlite_dev.db
+DB_URL=file:sqlite.db
 
 # Server
 PORT=3000
@@ -220,7 +222,7 @@ HOST=localhost
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `DB_URL` | `file:sqlite_dev.db` | SQLite database URL |
+| `DB_URL` | `file:sqlite.db` | SQLite database URL |
 | `PORT` | `3000` | Server port |
 | `HOST` | `localhost` | Server host |
 
@@ -272,7 +274,7 @@ bun run db:push
 
 ```bash
 # Delete database file
-del sqlite_dev.db
+del sqlite.db
 
 # Regenerate and push
 bun run db:generate
