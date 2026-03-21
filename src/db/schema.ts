@@ -8,3 +8,10 @@ export const users = sqliteTable('users', {
   createdAt: text('created_at').notNull().default(new Date().toISOString()),
   updatedAt: text('updated_at'),
 });
+
+export const sessions = sqliteTable('sessions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  token: text('token').notNull(),
+  userId: integer('user_id').notNull().references(() => users.id),
+  createdAt: text('created_at').notNull().default(new Date().toISOString()),
+});

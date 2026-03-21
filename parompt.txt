@@ -18,7 +18,7 @@ Nanti documen planning nya akan di gunakan oleh Programmer atau model yang lebih
 
 ================================================================
 
-buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
+Buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
 lebih murah.
 
 isi dari planing nya adalah sebagai berikut :
@@ -64,4 +64,53 @@ Struktur File :
 
 Jelaskan Tahapan - tahapan  yang harus di lakukkan untuk mengimplementasikan Fitur ini, anggap nanti yang
 mengimplentasikan programmer juniar atau user model ai yang lebih murah.
+
+
+=========================================================================
+
+Buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
+lebih murah.
+
+isi dari planing nya adalah sebagai berikut :
+
+buat table sessions :
+id integer  auto increment
+token varchar 255 not null (isinya UUID untuk token user yang login)
+user_id integer (FK ke table users)
+created_ad  timestamp default current_timestamp
+
+buatkan API untuk registrasi login user
+
+Endpoint : POST /api/users/login
+
+Request Body :
+
+{
+    "email" : "audy123ari@gmail.com"
+    "password" : "rahasia"
+}
+
+Response Body (Succees) :
+
+{
+    "Data" : "token"
+}
+
+Response Body (Error) :
+
+{
+    "Error" : "Email atau password salah"
+}
+
+Struktur Folder didalam src
+- Router : ini berisi routing Elysia JS
+- services : ini berisi logic bisnis aplikasi
+
+Struktur File :
+- Router : menggunakan format misal users-route.ts
+- Services : menggunakan format misal users-services.ts
+
+Jelaskan Tahapan - tahapan  yang harus di lakukkan untuk mengimplementasikan Fitur ini, anggap nanti yang
+mengimplentasikan programmer juniar atau user model ai yang lebih murah.
+
 
