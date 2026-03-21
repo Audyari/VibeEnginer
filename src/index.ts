@@ -1,6 +1,6 @@
 import { Elysia } from 'elysia';
 import { swagger } from '@elysiajs/swagger';
-import { usersRoutes } from './routes';
+import { usersRoutes } from './Router/users-route';
 
 const app = new Elysia()
   // Swagger documentation at /swagger

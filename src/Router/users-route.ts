@@ -2,33 +2,26 @@ import { Elysia, t } from 'elysia';
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
 import { users } from '../db/schema';
+import { registerUser } from '../services/users-services';
 
 export const usersRoutes = new Elysia()
-  .group('/users', (app) => 
+  .group('/api/users', (app) =>
     app
-      // GET /users - Get all users
+      // GET /api/users - Get all users
       .get('/', async () => {
         const allUsers = await db.select().from(users);
         return { success: true, data: allUsers };
       })
 
-      // POST /users - Create new user
+      // POST /api/users - Register new user
       .post('/', async ({ body }) => {
-        await db.insert(users).values({
-          name: body.name,
-          email: body.email,
-          password: body.password,
-        });
+        const result = await registerUser(body);
 
-        const newUser = await db.select().from(users)
-          .orderBy(users.id, 'desc')
-          .limit(1);
+        if (!result.success) {
+          return { Error: result.error };
+        }
 
-        return {
-          success: true,
-          message: 'User created successfully',
-          id: newUser[0].id
-        };
+        return { Data: 'OK' };
       }, {
         body: t.Object({
           name: t.String(),
@@ -37,7 +30,7 @@ export const usersRoutes = new Elysia()
         }),
       })
 
-      // GET /users/:id - Get user by ID
+      // GET /api/users/:id - Get user by ID
       .get('/:id', async ({ params }) => {
         const id = parseInt(params.id);
         
@@ -58,7 +51,7 @@ export const usersRoutes = new Elysia()
         }),
       })
 
-      // PUT /users/:id - Update user
+      // PUT /api/users/:id - Update user
       .put('/:id', async ({ params, body }) => {
         const id = parseInt(params.id);
 
@@ -86,7 +79,7 @@ export const usersRoutes = new Elysia()
         }),
       })
 
-      // DELETE /users/:id - Delete user
+      // DELETE /api/users/:id - Delete user
       .delete('/:id', async ({ params }) => {
         const id = parseInt(params.id);
 
