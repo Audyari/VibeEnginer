@@ -17,13 +17,13 @@ function createTestApp() {
 // Test data helpers
 const testUserData = {
   name: 'Test User',
-  email: 'test@example.com',
+  email: `test_${Date.now()}@example.com`,
   password: 'password123',
 };
 
 const testUserData2 = {
   name: 'Test User Two',
-  email: 'test2@example.com',
+  email: `test2_${Date.now()}@example.com`,
   password: 'password456',
 };
 
@@ -89,6 +89,27 @@ describe('Users API', () => {
 
       expect(response.status).toBe(200);
       expect(data.data.length).toBeGreaterThan(initialLength);
+    });
+
+    it('Scenario C: Response must not include password field', async () => {
+      // Create a user
+      await fetch(`${baseUrl}/api/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testUserData),
+      });
+
+      // Get all users
+      const response = await fetch(`${baseUrl}/api/users`);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.data.length).toBeGreaterThan(0);
+      
+      // Verify no user object has a password field
+      for (const user of data.data) {
+        expect(user.password).toBeUndefined();
+      }
     });
   });
 
@@ -371,13 +392,21 @@ describe('Users API', () => {
       expect(data.data.email).toBe(testUserData.email);
     });
 
-    it('Scenario B: Send invalid ID (alphabetic); expect invalid ID error', async () => {
+    it('Scenario B: Response must not include password field', async () => {
+      const response = await fetch(`${baseUrl}/api/users/${createdUserId}`);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.data.password).toBeUndefined();
+    });
+
+    it('Scenario C: Send invalid ID (alphabetic); expect invalid ID error', async () => {
       const response = await fetch(`${baseUrl}/api/users/abc`);
 
       expect(response.status).toBe(500);
     });
 
-    it('Scenario B: Send non-existent numeric ID; expect user not found error', async () => {
+    it('Scenario D: Send non-existent numeric ID; expect user not found error', async () => {
       const response = await fetch(`${baseUrl}/api/users/999999`);
 
       expect(response.status).toBe(500);
@@ -405,10 +434,10 @@ describe('Users API', () => {
       createdUserId = user.id;
     });
 
-    it('Scenario A: Update user data and verify changes', async () => {
+    it('Scenario A: Update user data with password and verify changes', async () => {
       const updatePayload = {
         name: 'Updated Name',
-        email: 'updated@example.com',
+        email: `updated_${Date.now()}@example.com`,
         password: 'newpassword123',
       };
 
@@ -424,10 +453,63 @@ describe('Users API', () => {
       // Verify changes by re-fetching
       const getResponse = await fetch(`${baseUrl}/api/users/${createdUserId}`);
       const getData = await getResponse.json();
-
+      
       expect(getResponse.status).toBe(200);
       expect(getData.data.name).toBe('Updated Name');
-      expect(getData.data.email).toBe('updated@example.com');
+      expect(getData.data.email).toBe(updatePayload.email);
+    });
+
+    it('Scenario B: Update user data without password (profile update only)', async () => {
+      const updatePayload = {
+        name: 'Updated Name Only',
+        email: `updated2_${Date.now()}@example.com`,
+      };
+
+      // Update user without password
+      const updateResponse = await fetch(`${baseUrl}/api/users/${createdUserId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatePayload),
+      });
+
+      expect(updateResponse.status).toBe(200);
+
+      // Verify changes by re-fetching
+      const getResponse = await fetch(`${baseUrl}/api/users/${createdUserId}`);
+      const getData = await getResponse.json();
+
+      expect(getResponse.status).toBe(200);
+      expect(getData.data.name).toBe('Updated Name Only');
+      expect(getData.data.email).toBe(updatePayload.email);
+    });
+
+    it('Scenario C: Update user with duplicate email should fail', async () => {
+      // Create another user first
+      await fetch(`${baseUrl}/api/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testUserData2),
+      });
+
+      // Get the second user's ID
+      const response = await fetch(`${baseUrl}/api/users`);
+      const data = await response.json();
+      const user2 = data.data.find((u: any) => u.email === testUserData2.email);
+
+      // Try to update second user's email to the first user's email
+      const updateResponse = await fetch(`${baseUrl}/api/users/${user2.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: testUserData2.name,
+          email: testUserData.email, // Duplicate email
+        }),
+      });
+
+      const updateData = await updateResponse.json();
+
+      expect(updateResponse.status).toBe(200);
+      expect(updateData.Error).toBe('Email sudah terdaftar');
     });
   });
 
