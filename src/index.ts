@@ -4,7 +4,19 @@ import { usersRoutes } from './Router/users-route';
 
 const app = new Elysia()
   // Swagger documentation at /swagger
-  .use(swagger())
+  .use(swagger({
+    documentation: {
+      info: {
+        title: 'VibeEnginer API Documentation',
+        version: '1.0.0',
+        description: 'Dokumentasi interaktif untuk REST API VibeEnginer'
+      },
+      tags: [
+        { name: 'General', description: 'Endpoint fungsionalitas umum' },
+        { name: 'Users', description: 'Endpoint fungsionalitas User & Autentikasi' }
+      ]
+    }
+  }))
   
   // Health check endpoint
   .get('/', () => {

@@ -11,11 +11,17 @@ export const usersRoutes = new Elysia()
       // GET /api/users - Get all users
       .get('/', async () => {
         const allUsers = await db.select().from(users);
-        
+
         // Exclude password from response
         const usersWithoutPassword = allUsers.map(({ password, ...user }) => user);
-        
+
         return { success: true, data: usersWithoutPassword };
+      }, {
+        detail: {
+          summary: "Get All Users",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk mendapatkan semua user yang terdaftar dalam database."
+        },
       })
 
       // POST /api/users - Register new user
@@ -33,6 +39,11 @@ export const usersRoutes = new Elysia()
           email: t.String({ format: 'email', maxLength: 255 }),
           password: t.String({ minLength: 6, maxLength: 100 }),
         }),
+        detail: {
+          summary: "Registrasi User Baru",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk mendaftarkan user baru ke dalam database."
+        },
       })
 
       // POST /api/users/login - Login user
@@ -51,6 +62,11 @@ export const usersRoutes = new Elysia()
           email: t.String(),
           password: t.String(),
         }),
+        detail: {
+          summary: "Login User",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk login user dan mendapatkan token autentikasi."
+        },
       })
 
       // GET /api/users/current - Get current user
@@ -74,6 +90,12 @@ export const usersRoutes = new Elysia()
         }
 
         return { Data: result.data };
+      }, {
+        detail: {
+          summary: "Get Current User",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk mendapatkan data user yang sedang login berdasarkan token autentikasi."
+        },
       })
 
       // DELETE /api/users/logout - Logout user
@@ -99,6 +121,12 @@ export const usersRoutes = new Elysia()
           set.status = 401;
           return { Error: 'Unauthorized' };
         }
+      }, {
+        detail: {
+          summary: "Logout User",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk logout user dan menginvalidate token autentikasi."
+        },
       })
 
       // GET /api/users/:id - Get user by ID
@@ -123,6 +151,11 @@ export const usersRoutes = new Elysia()
         params: t.Object({
           id: t.String(),
         }),
+        detail: {
+          summary: "Get User by ID",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk mendapatkan data user berdasarkan ID."
+        },
       })
 
       // PUT /api/users/:id - Update user
@@ -136,7 +169,7 @@ export const usersRoutes = new Elysia()
         // Check if email is being changed and if it already exists
         if (body.email) {
           const existingUser = await db.select().from(users).where(eq(users.email, body.email)).limit(1);
-          
+
           if (existingUser.length > 0 && existingUser[0]!.id !== id) {
             return { Error: 'Email sudah terdaftar' };
           }
@@ -173,6 +206,11 @@ export const usersRoutes = new Elysia()
         params: t.Object({
           id: t.String(),
         }),
+        detail: {
+          summary: "Update User by ID",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk memperbarui data user berdasarkan ID."
+        },
       })
 
       // DELETE /api/users/:id - Delete user
@@ -190,5 +228,10 @@ export const usersRoutes = new Elysia()
         params: t.Object({
           id: t.String(),
         }),
+        detail: {
+          summary: "Delete User by ID",
+          tags: ['Users'],
+          description: "Endpoint ini digunakan untuk menghapus user berdasarkan ID."
+        },
       })
   );
