@@ -208,7 +208,9 @@ mengimplentasikan programmer juniar atau user model ai yang lebih murah.
 coba review PR ini apa ada yang masih perlu di improve atau tidak , jika ada tambahkan 
 di komentar PR nya.
 
+===========================================
 
+cek komen di PR ini .... perbaiki sesuai yg di minta di komentar.
 
 
 
