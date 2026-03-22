@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import { eq } from 'drizzle-orm';
+import bcrypt from 'bcryptjs';
 import { db } from '../db';
 import { users } from '../db/schema';
 import { registerUser, loginUser, getCurrentUser, logoutUser } from '../services/users-services';
@@ -125,11 +126,15 @@ export const usersRoutes = new Elysia()
           throw new Error('Invalid user ID');
         }
 
+        // Hash password before updating
+        const hashedPassword = await bcrypt.hash(body.password, 10);
+
         await db.update(users)
           .set({
             name: body.name,
             email: body.email,
-            password: body.password,
+            password: hashedPassword,
+            updatedAt: new Date().toISOString(),
           })
           .where(eq(users.id, id));
 
