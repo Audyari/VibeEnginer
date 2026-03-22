@@ -54,9 +54,14 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk mendaftarkan user baru ke dalam database."
         },
-        response: t.Object({
-          Data: t.String(),
-        }),
+        response: t.Union([
+          t.Object({
+            Data: t.String(),
+          }),
+          t.Object({
+            Error: t.String(),
+          }),
+        ]),
       })
 
       // POST /api/users/login - Login user
@@ -91,22 +96,25 @@ export const usersRoutes = new Elysia()
       })
 
       // GET /api/users/current - Get current user
-      .get('/current', async ({ headers }) => {
+      .get('/current', async ({ headers, set }) => {
         const authHeader = headers.authorization;
 
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          set.status = 401;
           return { Error: 'Unauthorized' };
         }
 
         const token = authHeader.slice(7); // Remove 'Bearer ' prefix
 
         if (!token || token.trim() === '') {
+          set.status = 401;
           return { Error: 'Unauthorized' };
         }
 
         const result = await getCurrentUser(token.trim());
 
         if (!result.success) {
+          set.status = 401;
           return { Error: 'Unauthorized' };
         }
 
