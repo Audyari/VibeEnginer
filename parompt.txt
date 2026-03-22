@@ -222,4 +222,25 @@ Buatkan issus.md untuk bug ini , jelaskan tahapan bagaimana cara perbaiki nya un
 atau model ai yang lebih murah.
 
 
+=================================================
+
+Buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
+lebih murah.
+
+isi dari planing nya adalah sebagai berikut :
+
+Buatkan Unit test untuk semua API yg tersedia
+
+simpan di folder test, menggunakan bun test
+
+setiap secenario, hapus datanya terlebih dahulu agar konsisten
+
+buat secenario test API selengkap mungkin
+
+Jangan buatkan terlalu detail instruksi unit test nya. Buatkan saja sekenario apa saja yang harus di test,
+Biarkan nanti yang imlementasi detail secenario nya adalah junior programmer atau model AI yg lebih murah.
+
+
+
+
 
