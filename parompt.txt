@@ -158,3 +158,57 @@ Struktur File :
 
 Jelaskan Tahapan - tahapan  yang harus di lakukkan untuk mengimplementasikan Fitur ini, anggap nanti yang
 mengimplentasikan programmer juniar atau user model ai yang lebih murah.
+
+==================================================================
+
+
+Buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
+lebih murah.
+
+isi dari planing nya adalah sebagai berikut :
+
+buatkan API untuk logout user
+
+Endpoint : DELETE /api/users/logout
+
+Header : 
+- Authorization Bearer<token> (token adalah token yang ada di table users)
+
+
+Response Body (Succees) :
+
+{
+    "Data" :"OK"
+}
+
+jika sukses logout, maka data session dengan token tersebut harus dihapus dari table session
+
+Response Body (Error) :
+
+{
+    "Error" : "Unauthorized"
+}
+
+Struktur Folder didalam src
+- Router : ini berisi routing Elysia JS
+- services : ini berisi logic bisnis aplikasi
+
+Struktur File :
+- Router : menggunakan format misal users-route.ts
+- Services : menggunakan format misal users-services.ts
+
+
+
+Jelaskan Tahapan - tahapan  yang harus di lakukkan untuk mengimplementasikan Fitur ini, anggap nanti yang
+mengimplentasikan programmer juniar atau user model ai yang lebih murah.
+
+
+=============================================
+
+coba review PR ini apa ada yang masih perlu di improve atau tidak , jika ada tambahkan 
+di komentar PR nya.
+
+
+
+
+
