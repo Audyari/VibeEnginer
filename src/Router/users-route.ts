@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import { eq } from 'drizzle-orm';
+import bcrypt from 'bcryptjs';
 import { db } from '../db';
 import { users } from '../db/schema';
 import { registerUser, loginUser, getCurrentUser, logoutUser } from '../services/users-services';
@@ -10,7 +11,11 @@ export const usersRoutes = new Elysia()
       // GET /api/users - Get all users
       .get('/', async () => {
         const allUsers = await db.select().from(users);
-        return { success: true, data: allUsers };
+        
+        // Exclude password from response
+        const usersWithoutPassword = allUsers.map(({ password, ...user }) => user);
+        
+        return { success: true, data: usersWithoutPassword };
       })
 
       // POST /api/users - Register new user
@@ -110,7 +115,10 @@ export const usersRoutes = new Elysia()
           throw new Error('User not found');
         }
 
-        return { success: true, data: user[0] };
+        // Exclude password from response
+        const { password, ...userWithoutPassword } = user[0]!;
+
+        return { success: true, data: userWithoutPassword };
       }, {
         params: t.Object({
           id: t.String(),
@@ -125,12 +133,34 @@ export const usersRoutes = new Elysia()
           throw new Error('Invalid user ID');
         }
 
+        // Check if email is being changed and if it already exists
+        if (body.email) {
+          const existingUser = await db.select().from(users).where(eq(users.email, body.email)).limit(1);
+          
+          if (existingUser.length > 0 && existingUser[0]!.id !== id) {
+            return { Error: 'Email sudah terdaftar' };
+          }
+        }
+
+        // Prepare update data
+        const updateData: {
+          name: string;
+          email: string;
+          password?: string;
+          updatedAt: string;
+        } = {
+          name: body.name,
+          email: body.email,
+          updatedAt: new Date().toISOString(),
+        };
+
+        // Only hash and update password if provided
+        if (body.password) {
+          updateData.password = await bcrypt.hash(body.password, 10);
+        }
+
         await db.update(users)
-          .set({
-            name: body.name,
-            email: body.email,
-            password: body.password,
-          })
+          .set(updateData)
           .where(eq(users.id, id));
 
         return { success: true, message: 'User updated successfully' };
@@ -138,7 +168,7 @@ export const usersRoutes = new Elysia()
         body: t.Object({
           name: t.String({ minLength: 3, maxLength: 255 }),
           email: t.String({ format: 'email', maxLength: 255 }),
-          password: t.String({ minLength: 6, maxLength: 100 }),
+          password: t.Optional(t.String({ minLength: 6, maxLength: 100 })),
         }),
         params: t.Object({
           id: t.String(),
