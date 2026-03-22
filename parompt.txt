@@ -265,4 +265,51 @@ Agar User lain yang mau menggunakan API di App ini lebih mudah tinggal membka sw
 Buat Tahapan tahapan yang harus dilakukkan untuk implementasi fitur ini, jelaskan secara detail dengan target
 junior programmer atau model AI yg lebih murah.
 
+========================================
+
+ternyata swagger nya tidak ada contoh response body nya, kosong, saya ingin semua nya ada
+contoh response body nya.
+
+============================
+
+jelaskan kepada saya ini projek apa ?
+
+===========================
+
+jelaskan alur lengkap proses registrasi user ?
+
+================================
+
+kenapa ada proses hashing password ? kenapa tidak di simpan password nya di database?
+
+===================================
+ 
+ kenapa algoritma yang di gunakan bcrypt? kenapa tidak algoritma yang lain?
+
+ ==================================
+
+ faktor beban 10 itu maksud nya apa ?
+
+ ===============================
+
+ emang kenapa algortma untuk hashing harus lambat ?
+
+ ===================================
+
+ coba buatkan diagram untuk flow registrasi user
+
+ =================================
+
+ jelaskan arsitektur kode di projek ini ?
+
+ =========================
+
+ darimana referensi Layered Arcitecture itu adalah best practice?
+ coba kasih saya buku atau artikel yang menjelaskan tentang ini.
+
+ ==============================
+
+ keunggulan nya apa menggunakan Layered Arcitecture ?
+
+
 
