@@ -72,16 +72,18 @@ export const usersRoutes = new Elysia()
       })
 
       // DELETE /api/users/logout - Logout user
-      .delete('/logout', async ({ headers }) => {
+      .delete('/logout', async ({ headers, set }) => {
         const authHeader = headers.authorization;
 
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          set.status = 401;
           return { Error: 'Unauthorized' };
         }
 
         const token = authHeader.slice(7); // Remove 'Bearer ' prefix
 
         if (!token || token.trim() === '') {
+          set.status = 401;
           return { Error: 'Unauthorized' };
         }
 
@@ -89,6 +91,7 @@ export const usersRoutes = new Elysia()
           const result = await logoutUser(token.trim());
           return { Data: result };
         } catch (error) {
+          set.status = 401;
           return { Error: 'Unauthorized' };
         }
       })
