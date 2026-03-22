@@ -24,9 +24,9 @@ export const usersRoutes = new Elysia()
         return { Data: 'OK' };
       }, {
         body: t.Object({
-          name: t.String(),
-          email: t.String(),
-          password: t.String(),
+          name: t.String({ minLength: 3, maxLength: 255 }),
+          email: t.String({ format: 'email', maxLength: 255 }),
+          password: t.String({ minLength: 6, maxLength: 100 }),
         }),
       })
 
@@ -136,9 +136,9 @@ export const usersRoutes = new Elysia()
         return { success: true, message: 'User updated successfully' };
       }, {
         body: t.Object({
-          name: t.String(),
-          email: t.String(),
-          password: t.String(),
+          name: t.String({ minLength: 3, maxLength: 255 }),
+          email: t.String({ format: 'email', maxLength: 255 }),
+          password: t.String({ minLength: 6, maxLength: 100 }),
         }),
         params: t.Object({
           id: t.String(),
