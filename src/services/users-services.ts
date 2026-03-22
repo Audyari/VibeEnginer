@@ -21,6 +21,17 @@ interface LoginUserResult {
   error?: string;
 }
 
+interface GetCurrentUserResult {
+  success: boolean;
+  data?: {
+    id: number;
+    name: string;
+    email: string;
+    createdAt: string;
+  };
+  error?: string;
+}
+
 export async function registerUser(payload: RegisterUserPayload): Promise<RegisterUserResult> {
   const { name, email, password } = payload;
 
@@ -71,4 +82,35 @@ export async function loginUser(email: string, password: string): Promise<LoginU
   });
 
   return { success: true, token };
+}
+
+export async function getCurrentUser(token: string): Promise<GetCurrentUserResult> {
+  // Query session by token
+  const session = await db.select().from(sessions).where(eq(sessions.token, token)).limit(1);
+
+  if (!session || session.length === 0) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const sessionData = session[0]!;
+
+  // Get user data from users table
+  const user = await db.select().from(users).where(eq(users.id, sessionData.userId)).limit(1);
+
+  if (!user || user.length === 0) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const userData = user[0]!;
+
+  // Return user data without password
+  return {
+    success: true,
+    data: {
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      createdAt: userData.createdAt,
+    },
+  };
 }
