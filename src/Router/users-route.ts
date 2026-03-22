@@ -2,7 +2,7 @@ import { Elysia, t } from 'elysia';
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
 import { users } from '../db/schema';
-import { registerUser, loginUser, getCurrentUser } from '../services/users-services';
+import { registerUser, loginUser, getCurrentUser, logoutUser } from '../services/users-services';
 
 export const usersRoutes = new Elysia()
   .group('/api/users', (app) =>
@@ -69,6 +69,28 @@ export const usersRoutes = new Elysia()
         }
 
         return { Data: result.data };
+      })
+
+      // DELETE /api/users/logout - Logout user
+      .delete('/logout', async ({ headers }) => {
+        const authHeader = headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return { Error: 'Unauthorized' };
+        }
+
+        const token = authHeader.slice(7); // Remove 'Bearer ' prefix
+
+        if (!token || token.trim() === '') {
+          return { Error: 'Unauthorized' };
+        }
+
+        try {
+          const result = await logoutUser(token.trim());
+          return { Data: result };
+        } catch (error) {
+          return { Error: 'Unauthorized' };
+        }
       })
 
       // GET /api/users/:id - Get user by ID
