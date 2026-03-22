@@ -113,4 +113,48 @@ Struktur File :
 Jelaskan Tahapan - tahapan  yang harus di lakukkan untuk mengimplementasikan Fitur ini, anggap nanti yang
 mengimplentasikan programmer juniar atau user model ai yang lebih murah.
 
+============================================================================
 
+
+Buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
+lebih murah.
+
+isi dari planing nya adalah sebagai berikut :
+
+buatkan API untuk get user saat ini yang sedang login
+
+Endpoint : get /api/users/current
+
+Header : 
+- Authorization Bearer<token> (token adalah token yang ada di table users)
+
+
+Response Body (Succees) :
+
+{
+    "Data" : {
+        "id" : 1,
+        "name" : "AudyariW",
+        "email: : "audy123ari@gmail.com",
+        "created_at" : "timestamp"
+    }
+}
+
+Response Body (Error) :
+
+{
+    "Error" : "Unauthorized"
+}
+
+Struktur Folder didalam src
+- Router : ini berisi routing Elysia JS
+- services : ini berisi logic bisnis aplikasi
+
+Struktur File :
+- Router : menggunakan format misal users-route.ts
+- Services : menggunakan format misal users-services.ts
+
+
+
+Jelaskan Tahapan - tahapan  yang harus di lakukkan untuk mengimplementasikan Fitur ini, anggap nanti yang
+mengimplentasikan programmer juniar atau user model ai yang lebih murah.
