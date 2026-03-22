@@ -4,3 +4,6 @@
 
 # Open Drizzle Studio (GUI)
 2. bun run db:studio
+
+# Stop all Bun processes
+3. taskkill /F /IM bun.exe

@@ -212,5 +212,14 @@ di komentar PR nya.
 
 cek komen di PR ini .... perbaiki sesuai yg di minta di komentar.
 
+===========================================
+
+coba jalankan aplikasi nya, lalu coba registrasi user baru dengan nama panjang nya 300 karakter
+
+=============================================
+
+Buatkan issus.md untuk bug ini , jelaskan tahapan bagaimana cara perbaiki nya untk junior programmer
+atau model ai yang lebih murah.
+
 
 
