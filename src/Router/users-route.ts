@@ -117,8 +117,8 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk mendapatkan data user yang sedang login berdasarkan token autentikasi."
         },
-        response: t.Union([
-          t.Object({
+        response: {
+          200: t.Object({
             Data: t.Object({
               id: t.Number(),
               name: t.String(),
@@ -127,10 +127,10 @@ export const usersRoutes = new Elysia()
               updatedAt: t.Optional(t.String()),
             }),
           }),
-          t.Object({
+          401: t.Object({
             Error: t.String(),
           }),
-        ]),
+        },
       })
 
       // DELETE /api/users/logout - Logout user
@@ -162,14 +162,14 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk logout user dan menginvalidate token autentikasi."
         },
-        response: t.Union([
-          t.Object({
+        response: {
+          200: t.Object({
             Data: t.Any(),
           }),
-          t.Object({
+          401: t.Object({
             Error: t.String(),
           }),
-        ]),
+        },
       })
 
       // GET /api/users/:id - Get user by ID
