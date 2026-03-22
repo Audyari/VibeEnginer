@@ -249,4 +249,8 @@ teknologi stack yang di gunakan , library yang di gunakan , cara run aplikasi, c
 
 ===========================
 
+Tambahkan komentar di tiap function di @users-services.ts , jelaskan untuk apa function tersebut.
+
+========================
+
 

@@ -32,6 +32,13 @@ interface GetCurrentUserResult {
   error?: string;
 }
 
+/**
+ * Mendaftarkan user baru ke dalam database.
+ * Melakukan pengecekan duplikasi email dan melakukan hashing pada password sebelum disimpan.
+ *
+ * @param {RegisterUserPayload} payload - Objek payload berisi name, email, dan password user baru.
+ * @returns {Promise<RegisterUserResult>} - Hasil operasi registrasi (success status dan opsional error message).
+ */
 export async function registerUser(payload: RegisterUserPayload): Promise<RegisterUserResult> {
   const { name, email, password } = payload;
 
@@ -55,6 +62,14 @@ export async function registerUser(payload: RegisterUserPayload): Promise<Regist
   return { success: true };
 }
 
+/**
+ * Melakukan autentikasi user dengan mencocokkan email dan password.
+ * Jika valid, akan men-generate token session menggunakan UUID v4 dan menyimpannya ke database.
+ *
+ * @param {string} email - Email user yang akan login.
+ * @param {string} password - Password user.
+ * @returns {Promise<LoginUserResult>} - Hasil login berisi status success, token session (jika berhasil), atau pesan error.
+ */
 export async function loginUser(email: string, password: string): Promise<LoginUserResult> {
   // Query user by email
   const user = await db.select().from(users).where(eq(users.email, email)).limit(1);
@@ -84,6 +99,12 @@ export async function loginUser(email: string, password: string): Promise<LoginU
   return { success: true, token };
 }
 
+/**
+ * Mengambil data profil user yang sedang login berdasarkan token session yang diberikan.
+ *
+ * @param {string} token - Token autentikasi/session aktif milik user.
+ * @returns {Promise<GetCurrentUserResult>} - Data profile user (tanpa password) jika token valid, atau error unauthorize jika gagal.
+ */
 export async function getCurrentUser(token: string): Promise<GetCurrentUserResult> {
   // Query session by token
   const session = await db.select().from(sessions).where(eq(sessions.token, token)).limit(1);
@@ -115,6 +136,13 @@ export async function getCurrentUser(token: string): Promise<GetCurrentUserResul
   };
 }
 
+/**
+ * Menghapus atau mencabut token session dari database untuk proses logout user.
+ * Mengecek apakah session ada sebelum dihapus, apabila tidak akan melempar Custom Error (401).
+ *
+ * @param {string} token - Token autentikasi/session yang ingin dihapus (logout).
+ * @returns {Promise<string>} - Mengembalikan string 'OK' jika proses logout berhasil.
+ */
 export async function logoutUser(token: string): Promise<string> {
   // Query session by token to verify it exists
   const session = await db.select().from(sessions).where(eq(sessions.token, token)).limit(1);
