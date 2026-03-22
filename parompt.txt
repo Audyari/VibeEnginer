@@ -254,3 +254,15 @@ Tambahkan komentar di tiap function di @users-services.ts , jelaskan untuk apa f
 ========================
 
 
+Buatkan issue.md yang berisi perencanaan untuk nanti di implementasikan oleh junior programmer atau ai model yang
+lebih murah.
+
+isi dari planing nya adalah sebagai berikut :
+
+Saya mau tambahkan fitur swagger di project ini.
+Agar User lain yang mau menggunakan API di App ini lebih mudah tinggal membka swagger nya. 
+
+Buat Tahapan tahapan yang harus dilakukkan untuk implementasi fitur ini, jelaskan secara detail dengan target
+junior programmer atau model AI yg lebih murah.
+
+
