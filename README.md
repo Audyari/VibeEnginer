@@ -1,311 +1,122 @@
-# VibeEnginer API
+# VibeEnginer Backend API
 
-Backend API built with **Bun**, **Elysia.JS**, **Drizzle ORM**, and **SQLite**.
+VibeEnginer adalah backend REST API modern, super cepat, dan aman yang dibangun menggunakan ekosistem terbaru Javascript/Typescript. Aplikasi ini berfungsi untuk mengelola data user, autentikasi melalui token _session_, dan penyajian data layanan lainnya. Dirancang agar modular, mudah dites, dan didokumentasikan dengan baik melalui integrasi Swagger.
 
----
-
-## 🚀 Features
-
-- ⚡ **Bun** - Fast JavaScript runtime
-- 🦊 **Elysia.JS** - Fast, friendly HTTP framework
-- 🗄️ **Drizzle ORM** - TypeScript ORM with full type safety
-- 💾 **SQLite** - Lightweight embedded database
-- 📚 **Swagger UI** - Auto-generated API documentation
-- 🔥 **Hot Reload** - Development with `--watch`
-
----
-
-## 📦 Tech Stack
-
-| Technology | Purpose |
-|------------|---------|
-| Bun | Runtime |
-| Elysia.JS | HTTP Framework |
-| Drizzle ORM | Database ORM |
-| libsql | SQLite driver |
-| TypeScript | Type safety |
+## 🚀 Teknologi Stack & Library
+Proyek ini ditenagai oleh _tech stack_ modern berikut:
+- **Runtime:** [Bun](https://bun.sh/) - Javascript runtime super cepat dan _all-in-one toolkit_.
+- **Framework:** [ElysiaJS](https://elysiajs.com/) - Web framework tercepat untuk Bun.
+- **ORM:** [Drizzle ORM](https://orm.drizzle.team/) - TypeScript ORM minimalis dan _type-safe_.
+- **Database:** SQLite via [LibSQL](https://turso.tech/libsql) client.
+- **Validasi:** Elysia _built-in_ `t.Object` (berbasis TypeBox).
+- **Keamanan:**
+  - `bcryptjs`: Digunakan untuk melakukan *hashing* pada *password* user.
+  - `uuid`: Generate session token (UUID v4) untuk autentikasi sesi user.
+- **Dokumentasi API:** `@elysiajs/swagger` - Menyediakan Swagger UI.
+- **Testing Engine:** `bun:test` - *Test runner* bawaan dari Bun.
 
 ---
 
-## 🛠️ Installation
+## 📁 Arsitektur Direktori (Struktur File)
+Aplikasi ini memakai pola standar _layered architecture_ yang memisahkan antara bagian *routing*, *business logic (services)*, dan interaksi *database*.
 
-### Prerequisites
-
-- [Bun](https://bun.sh/) installed
-
-### Setup
-
-```bash
-# Install dependencies
-bun install
-
-# Generate database schema
-bun run db:generate
-
-# Push schema to database
-bun run db:push
-
-# (Optional) Seed dummy data
-bun run src/db/seed.ts
-```
-
----
-
-## 🏃 Running
-
-### Development
-
-```bash
-# Start dev server with hot reload
-bun run dev
-```
-
-### Production
-
-```bash
-# Start production server
-bun run start
-```
-
-Server will run at: **`http://localhost:3000`**
-
----
-
-## 📚 API Documentation
-
-### Swagger UI
-
-Open in browser: **`http://localhost:3000/swagger`**
-
-### Swagger JSON
-
-```
-http://localhost:3000/swagger/json
-```
-
----
-
-## 📖 API Endpoints
-
-### Health Check
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Welcome message |
-| GET | `/health` | Server health status |
-
-### Users CRUD & Auth
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/users` | Get all users |
-| GET | `/api/users/:id` | Get user by ID |
-| POST | `/api/users` | Register new user |
-| POST | `/api/users/login` | Login user |
-| PUT | `/api/users/:id` | Update user |
-| DELETE | `/api/users/:id` | Delete user |
-
----
-
-## 📝 Usage Examples
-
-### Get All Users
-
-```bash
-curl http://localhost:3000/api/users
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "Audyari",
-      "email": "audyari@example.com",
-      "password": "$2a$10$hashedpassword...",
-      "createdAt": "2026-03-21T16:28:50.120Z",
-      "updatedAt": null
-    }
-  ]
-}
-```
-
-### Get User by ID
-
-```bash
-curl http://localhost:3000/api/users/1
-```
-
-### Register User
-
-```bash
-curl -X POST http://localhost:3000/api/users \
-  -H "Content-Type: application/json" \
-  -d "{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"password\":\"secret123\"}"
-```
-
-### Login User
-
-```bash
-curl -X POST http://localhost:3000/api/users/login \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"john@example.com\",\"password\":\"secret123\"}"
-```
-
-### Update User
-
-```bash
-curl -X PUT http://localhost:3000/api/users/1 \
-  -H "Content-Type: application/json" \
-  -d "{\"name\":\"John Updated\",\"email\":\"john.new@example.com\",\"password\":\"newpass\"}"
-```
-
-### Delete User
-
-```bash
-curl -X DELETE http://localhost:3000/api/users/1
-```
-
----
-
-## 🗄️ Database Commands
-
-```bash
-# Generate migration files
-bun run db:generate
-
-# Push schema to database
-bun run db:push
-
-# Open Drizzle Studio (GUI)
-bun run db:studio
-
-# Run migrations
-bun run db:migrate
-```
-
-Drizzle Studio: **`http://localhost:3001`**
-
----
-
-## 📁 Project Structure
-
-```
-VibeEnginer/
+```text
+vibeenginer/
 ├── src/
-│   ├── index.ts          # Elysia server entry point
-│   ├── db/
-│   │   ├── index.ts      # Database connection
-│   │   ├── schema.ts     # Drizzle table definitions
-│   │   ├── seed.ts       # Dummy data seeder
-│   │   └── migrate.ts    # Migration script
-│   ├── Router/
-│   │   └── users-route.ts # API routes
-│   ├── services/
-│   │   └── users-services.ts # Business logic
-│   └── config/
-│       └── env.ts        # Environment variables
-├── drizzle/              # Migration files
-├── drizzle.config.ts     # Drizzle configuration
-├── .env                  # Environment variables
-├── sqlite.db             # SQLite database file
-└── package.json
+│   ├── config/       # (Opsional) Konfigurasi environment & aplikasi
+│   ├── db/           # File koneksi DB, skema (schema.ts), dan seeder
+│   ├── Router/       # Definisi Endpoint API (controller/router) (Contoh: users-route.ts)
+│   ├── services/     # Business logic & interaksi DB (Contoh: users-services.ts)
+│   └── index.ts      # Entry point utama aplikasi
+├── test/             # Skrip unit testing & integration testing (Contoh: api.test.ts)
+├── package.json      # Daftar dependency & script eksekusi
+└── README.md         # Dokumentasi 
 ```
+- **Penamaan File:** File direpresentasikan menggunakan *kebab-case* (e.g., `users-route.ts`, `users-services.ts`).
 
 ---
 
-## ⚙️ Environment Variables
+## 🗄️ Skema Database
+Aplikasi ini memiliki 2 buah tabel utama yang didefinisikan pada `src/db/schema.ts`:
 
-Create a `.env` file:
+### 1. `users`
+Menyimpan data pendaftaran dan kredensial.
+- `id` (Integer) - *Primary Key*, *Auto Increment*
+- `name` (Text) - Nama user (*Not Null*)
+- `email` (Text) - Email user (*Not Null, Unique*)
+- `password` (Text) - Password terekenkripsi (*Not Null*)
+- `createdAt` (Text) - Tanggal terbuat (*Not Null, Default ISO String*)
+- `updatedAt` (Text) - Tanggal pembaruan profil user
 
-```env
-# Database
-DB_URL=file:sqlite.db
-
-# Server
-PORT=3000
-HOST=localhost
-```
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `DB_URL` | `file:sqlite.db` | SQLite database URL |
-| `PORT` | `3000` | Server port |
-| `HOST` | `localhost` | Server host |
+### 2. `sessions`
+Menyimpan sesi login user supaya user tidak perlu login berulang.
+- `id` (Integer) - *Primary Key*, *Auto Increment*
+- `token` (Text) - Token keamanan berbentuk UUID (*Not Null*)
+- `userId` (Integer) - Relasi ke tabel `users.id` (*Foreign Key*, *Not Null*)
+- `createdAt` (Text) - Waktu sesi login dibuat (*Not Null, Default ISO String*)
 
 ---
 
-## 🧪 Testing
+## 🌍 API yang Tersedia
 
+Secara *default*, *server* berjalan di **http://localhost:3000**.
+List lengkap Endpoint interaktif tersedia di Halaman UI Docs: **`GET /swagger`**
+
+| Endpoint | Method | Keterangan | Autentikasi |
+| -------- | ------ | ---------- | ----------- |
+| `/` | `GET` | Health check sederhana & informasi API | ❌ |
+| `/health` | `GET` | Cek status server | ❌ |
+| `/swagger` | `GET` | Halaman Dokumentasi Interaktif (Swagger UI) | ❌ |
+| `/api/users` | `GET` | Mengambil semua profil user yang terdaftar | ❌ |
+| `/api/users/:id` | `GET` | Mengambil sebuah data spesifik user berdasarkan ID-nya | ❌ |
+| `/api/users/current`| `GET` | Mengambil data user yang sedang berhasil _login_ saat ini | ✅ (Header: `Authorization: Bearer <token>`) |
+| `/api/users` | `POST` | Mendaftarkan *user* baru (*Register*) | ❌ |
+| `/api/users/login` | `POST` | Autentikasi login *user* (Mengeluarkan token/session) | ❌ |
+| `/api/users/:id` | `PUT` | Memperbarui profil (Data email/nama, dan secara opsional *password*) | ❌ |
+| `/api/users/:id` | `DELETE`| Menghapus spesifik *user* beserta referensi *session*-nya | ❌ |
+| `/api/users/logout` | `DELETE`| *Sign-out* / Membatalkan *session* user berdasarkan Token aktif | ✅ (Header: `Authorization: Bearer <token>`) |
+
+---
+
+## 🛠️ Cara Setup Project
+Ikuti instruksi berikut untuk menjalankan projek secara lokal di komputer Anda:
+
+1. **Clone repository ini** ke dalam direktori komputer Anda.
+2. Akses masuk ke root folder proyek Anda.
+3. Install semua *dependencies* menggunakan perintah berikut:
+   ```bash
+   bun install
+   ```
+4. Lakukan pembuatan skema ke dalam Drizzle dan lakukan migrasi SQLite DB:
+   ```bash
+   bun run db:generate
+   bun run db:push
+   ```
+   *(Perintah ini akan secara otomatis memicu Drizzle untuk men-sinkronisasi `src/db/schema.ts` ke dalam file database SQLite Anda).*
+
+---
+
+## 🏃 Cara Menjalankan Aplikasi
+
+Setelah Setup berhasil dilakukan, Anda bisa menyalakan *Server* Backend:
+
+- **Mode Development (Untuk Development agar Auto-Reload aktif):**
+  ```bash
+  bun run dev
+  ```
+- **Mode Production:**
+  ```bash
+  bun run start
+  ```
+  *(Aplikasi biasanya akan terbuka di http://localhost:3000)*
+
+---
+
+## 🧪 Cara Test Aplikasi
+
+Sistem pengetesan sudah mencakup seluruh integrasi utama layaknya simulasi _Real Client_ ke server menggunakan pustaka bawaan **Bun Test**. Test ini akan secara bersih mengeksekusi *login, logout, registrasi, delete, hingga validasi edge-cases update.*
+
+Untuk menjalankan proses *Unit dan Integration Test* dengan hasil yang komprehensif, jalankan satu script berikut:
 ```bash
-# Health check
-curl http://localhost:3000/health
-
-# Get all users
-curl http://localhost:3000/api/users
-
-# Register user
-curl -X POST http://localhost:3000/api/users \
-  -H "Content-Type: application/json" \
-  -d "{\"name\":\"Test\",\"email\":\"test@test.com\",\"password\":\"123\"}"
-
-# Login user
-curl -X POST http://localhost:3000/api/users/login \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"test@test.com\",\"password\":\"123\"}"
+bun test
 ```
-
----
-
-## 📝 Scripts
-
-| Script | Command | Description |
-|--------|---------|-------------|
-| `dev` | `bun run dev` | Start dev server with watch |
-| `start` | `bun run start` | Start production server |
-| `db:generate` | `bun run db:generate` | Generate migration files |
-| `db:push` | `bun run db:push` | Push schema to database |
-| `db:migrate` | `bun run db:migrate` | Run migrations |
-| `db:studio` | `bun run db:studio` | Open Drizzle Studio |
-
----
-
-## 🔧 Troubleshooting
-
-### Database locked error
-
-```bash
-# Stop all Bun processes
-taskkill /F /IM bun.exe
-
-# Then run db commands
-bun run db:push
-```
-
-### Reset database
-
-```bash
-# Delete database file
-del sqlite.db
-
-# Regenerate and push
-bun run db:generate
-bun run db:push
-
-# Seed data (optional)
-bun run src/db/seed.ts
-```
-
----
-
-## 📄 License
-
-MIT
-
----
-
-## 👤 Author
-
-Made with ❤️ using Bun + Elysia + Drizzle

@@ -241,6 +241,12 @@ Jangan buatkan terlalu detail instruksi unit test nya. Buatkan saja sekenario ap
 Biarkan nanti yang imlementasi detail secenario nya adalah junior programmer atau model AI yg lebih murah.
 
 
+===============================================
 
+Update Readme.md, jelaskan tentang aplikasi ini, Arsitektur nya seperti folder dan penamaan File
+atau struktur file, jelaskan juga API yang tersedia, jelaskan juga schema database yang ada , cara setup Projek,
+teknologi stack yang di gunakan , library yang di gunakan , cara run aplikasi, cara test aplikasi
+
+===========================
 
 
