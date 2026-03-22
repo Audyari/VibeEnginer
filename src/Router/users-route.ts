@@ -22,6 +22,16 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk mendapatkan semua user yang terdaftar dalam database."
         },
+        response: t.Object({
+          success: t.Boolean(),
+          data: t.Array(t.Object({
+            id: t.Number(),
+            name: t.String(),
+            email: t.String(),
+            createdAt: t.String(),
+            updatedAt: t.Optional(t.String()),
+          })),
+        }),
       })
 
       // POST /api/users - Register new user
@@ -44,6 +54,9 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk mendaftarkan user baru ke dalam database."
         },
+        response: t.Object({
+          Data: t.String(),
+        }),
       })
 
       // POST /api/users/login - Login user
@@ -67,6 +80,14 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk login user dan mendapatkan token autentikasi."
         },
+        response: t.Union([
+          t.Object({
+            Data: t.String(),
+          }),
+          t.Object({
+            Error: t.String(),
+          }),
+        ]),
       })
 
       // GET /api/users/current - Get current user
@@ -96,6 +117,20 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk mendapatkan data user yang sedang login berdasarkan token autentikasi."
         },
+        response: t.Union([
+          t.Object({
+            Data: t.Object({
+              id: t.Number(),
+              name: t.String(),
+              email: t.String(),
+              createdAt: t.String(),
+              updatedAt: t.Optional(t.String()),
+            }),
+          }),
+          t.Object({
+            Error: t.String(),
+          }),
+        ]),
       })
 
       // DELETE /api/users/logout - Logout user
@@ -127,6 +162,14 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk logout user dan menginvalidate token autentikasi."
         },
+        response: t.Union([
+          t.Object({
+            Data: t.Any(),
+          }),
+          t.Object({
+            Error: t.String(),
+          }),
+        ]),
       })
 
       // GET /api/users/:id - Get user by ID
@@ -156,6 +199,16 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk mendapatkan data user berdasarkan ID."
         },
+        response: t.Object({
+          success: t.Boolean(),
+          data: t.Object({
+            id: t.Number(),
+            name: t.String(),
+            email: t.String(),
+            createdAt: t.String(),
+            updatedAt: t.Optional(t.String()),
+          }),
+        }),
       })
 
       // PUT /api/users/:id - Update user
@@ -211,6 +264,15 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk memperbarui data user berdasarkan ID."
         },
+        response: t.Union([
+          t.Object({
+            success: t.Boolean(),
+            message: t.String(),
+          }),
+          t.Object({
+            Error: t.String(),
+          }),
+        ]),
       })
 
       // DELETE /api/users/:id - Delete user
@@ -233,5 +295,9 @@ export const usersRoutes = new Elysia()
           tags: ['Users'],
           description: "Endpoint ini digunakan untuk menghapus user berdasarkan ID."
         },
+        response: t.Object({
+          success: t.Boolean(),
+          message: t.String(),
+        }),
       })
   );
