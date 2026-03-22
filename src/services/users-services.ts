@@ -114,3 +114,26 @@ export async function getCurrentUser(token: string): Promise<GetCurrentUserResul
     },
   };
 }
+
+export async function logoutUser(token: string): Promise<string> {
+  // Query session by token to verify it exists
+  const session = await db.select().from(sessions).where(eq(sessions.token, token)).limit(1);
+
+  if (!session || session.length === 0) {
+    throw new ResponseError('Unauthorized', 401);
+  }
+
+  // Delete the session from database
+  await db.delete(sessions).where(eq(sessions.token, token));
+
+  return 'OK';
+}
+
+class ResponseError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
